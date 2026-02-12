@@ -1,0 +1,231 @@
+pouetteee
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 text-white overflow-hidden">
+  <!-- Background Pattern -->
+  <div class="absolute inset-0 opacity-10">
+    <div class="absolute w-96 h-96 bg-white rounded-full blur-3xl -top-20 -left-20"></div>
+    <div class="absolute w-96 h-96 bg-white rounded-full blur-3xl -bottom-20 -right-20"></div>
+  </div>
+
+  <div class="container mx-auto px-4 py-20 md:py-32 relative z-10">
+    <div class="max-w-4xl mx-auto text-center">
+      <!-- Badge -->
+      <div class="inline-flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+        <span class="text-sm font-medium">✨ Disponible pour de nouvelles opportunités</span>
+      </div>
+
+      <!-- Titre principal -->
+      <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+        Développeur .NET
+        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-200">
+          Full-Stack Senior
+        </span>
+      </h1>
+
+      <!-- Description -->
+      <p class="text-xl md:text-2xl text-blue-100 mb-8 max-w-2xl mx-auto">
+        17 ans d'expérience dans la conception et la modernisation d'applications Web.
+        Expert en .NET 10, Angular, Azure et architectures modernes.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+        <a routerLink="/cv" 
+           class="inline-flex items-center justify-center bg-white text-primary-700 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+          📄 Voir mon CV
+        </a>
+        <a routerLink="/portfolio" 
+           class="inline-flex items-center justify-center bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/20 transition-all duration-300 border border-white/20">
+          💼 Mes projets
+        </a>
+      </div>
+
+      <!-- Tech Stack -->
+      <div class="flex flex-wrap justify-center gap-3 mb-8">
+        <span *ngFor="let tech of techStack" 
+              class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium border border-white/20 hover:bg-white/20 transition-colors">
+          <span>{{ tech.icon }}</span>
+          <span>{{ tech.name }}</span>
+        </span>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="mt-12 animate-bounce">
+        <button (click)="scrollToSection('about')" 
+                class="text-white/70 hover:text-white transition-colors">
+          <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="bg-white py-16 border-b border-gray-200">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div *ngFor="let stat of stats" class="text-center">
+        <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">{{ stat.value }}</div>
+        <div class="text-gray-600 font-medium">{{ stat.label }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-20 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">À propos de moi</h2>
+        <p class="text-xl text-gray-600">Passionné par les technologies .NET et l'architecture logicielle</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <!-- Image/Avatar -->
+        <div class="relative">
+          <div class="aspect-square rounded-2xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center text-8xl">
+            👨‍💻
+          </div>
+          <div class="absolute -bottom-4 -right-4 bg-white rounded-lg shadow-lg p-4">
+            <div class="text-sm font-semibold text-gray-700">17+ ans</div>
+            <div class="text-xs text-gray-500">d'expérience</div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Franck CALDERARA</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Développeur .NET expérimenté, fort de plus de 17 années d'expérience dans la conception 
+              et la modernisation d'applications Web. Expert en C#, ASP.NET Core, Angular, et architectures cloud Azure.
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 text-gray-700">
+              <span class="text-primary-600">📍</span>
+              <span>Coulounieix-Chamiers, Nouvelle-Aquitaine, France</span>
+            </div>
+            <div class="flex items-center gap-3 text-gray-700">
+              <span class="text-primary-600">💼</span>
+              <span>Disponible pour CDI / Freelance</span>
+            </div>
+            <div class="flex items-center gap-3 text-gray-700">
+              <span class="text-primary-600">🎯</span>
+              <span>Clean Architecture, SOLID, DevOps, Agile</span>
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <a routerLink="/cv" 
+               class="inline-flex items-center gap-2 btn-primary">
+              Télécharger mon CV
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services/Expertise Section -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Expertise</h2>
+      <p class="text-xl text-gray-600">Domaines de compétences clés</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <!-- Backend -->
+      <div class="card group hover:scale-105 transition-transform duration-300">
+        <div class="text-5xl mb-4">🔷</div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Backend .NET</h3>
+        <p class="text-gray-600 mb-4">
+          Développement d'APIs REST robustes avec .NET 10, Clean Architecture, 
+          Entity Framework Core et microservices.
+        </p>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>✓ .NET 10, C# 14</li>
+          <li>✓ ASP.NET Core, MVC</li>
+          <li>✓ Entity Framework Core</li>
+          <li>✓ JWT, OAuth, Security</li>
+        </ul>
+      </div>
+
+      <!-- Frontend -->
+      <div class="card group hover:scale-105 transition-transform duration-300">
+        <div class="text-5xl mb-4">🅰️</div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Frontend Angular</h3>
+        <p class="text-gray-600 mb-4">
+          Création d'interfaces modernes et réactives avec Angular 19, 
+          TypeScript et Tailwind CSS.
+        </p>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>✓ Angular 19, TypeScript</li>
+          <li>✓ RxJS, Signals</li>
+          <li>✓ Tailwind CSS, Responsive</li>
+          <li>✓ State Management</li>
+        </ul>
+      </div>
+
+      <!-- Cloud & DevOps -->
+      <div class="card group hover:scale-105 transition-transform duration-300">
+        <div class="text-5xl mb-4">☁️</div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Cloud & DevOps</h3>
+        <p class="text-gray-600 mb-4">
+          Déploiement et gestion d'applications sur Azure avec 
+          pipelines CI/CD automatisés.
+        </p>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>✓ Azure App Services</li>
+          <li>✓ Azure Functions, SQL</li>
+          <li>✓ Docker, Kubernetes</li>
+          <li>✓ CI/CD, Azure DevOps</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Final -->
+<section class="py-20 bg-gradient-to-r from-primary-600 to-primary-800 text-white">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-4xl font-bold mb-6">Travaillons ensemble !</h2>
+    <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+      Vous recherchez un développeur .NET senior pour votre projet ? 
+      Discutons de la façon dont je peux vous aider.
+    </p>
+    <a href="mailto:franck.calderara@example.com" 
+       class="inline-flex items-center gap-2 bg-white text-primary-700 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl">
+      📧 Me contacter
+    </a>
+  </div>
+</section>
+
+<!-- Loading State -->
+<div *ngIf="loading" class="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="text-center">
+    <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-600 mx-auto mb-4"></div>
+    <p class="text-gray-600">Chargement...</p>
+  </div>
+</div>
+
+<!-- Error State -->
+<div *ngIf="error" class="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="card max-w-md text-center">
+    <div class="text-6xl mb-4">⚠️</div>
+    <h3 class="text-xl font-bold text-gray-900 mb-2">Erreur de chargement</h3>
+    <p class="text-gray-600 mb-4">{{ error }}</p>
+    <button (click)="loadData()" class="btn-primary">
+      Réessayer
+    </button>
+  </div>
+</div>

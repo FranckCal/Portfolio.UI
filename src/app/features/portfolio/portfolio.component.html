@@ -1,0 +1,223 @@
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-16">
+  <div class="container mx-auto px-4 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Portfolio</h1>
+    <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+      Découvrez mes projets et réalisations professionnelles au fil de mes 17 années d'expérience
+    </p>
+    <div class="mt-6 flex justify-center gap-8 text-center">
+      <div>
+        <div class="text-3xl font-bold">{{ projects.length }}</div>
+        <div class="text-blue-200 text-sm">Projets</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold">17+</div>
+        <div class="text-blue-200 text-sm">Années</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold">10+</div>
+        <div class="text-blue-200 text-sm">Technologies</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Filtres -->
+<section class="py-8 bg-white border-b sticky top-20 z-40 shadow-sm">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-wrap gap-2 justify-center">
+      <button *ngFor="let filter of filters"
+              (click)="applyFilter(filter)"
+              [class]="selectedFilter === filter
+                ? 'bg-primary-600 text-white px-4 py-2 rounded-full font-medium shadow-md'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full font-medium transition-colors'">
+        {{ filter }}
+        <span *ngIf="selectedFilter === filter" class="ml-1 text-xs">
+          ({{ filteredProjects.length }})
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Grille de projets -->
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+
+    <!-- Aucun résultat -->
+    <div *ngIf="filteredProjects.length === 0 && !loading"
+         class="text-center py-20">
+      <div class="text-6xl mb-4">🔍</div>
+      <h3 class="text-2xl font-bold text-gray-700 mb-2">Aucun projet trouvé</h3>
+      <p class="text-gray-500">Essayez un autre filtre</p>
+      <button (click)="applyFilter('Tous')"
+              class="mt-4 btn-primary">
+        Voir tous les projets
+      </button>
+    </div>
+
+    <!-- Grid projets -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+      <div *ngFor="let project of filteredProjects"
+           (click)="openProject(project)"
+           class="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden group hover:-translate-y-2">
+
+        <!-- Image/Banner -->
+        <div class="h-48 bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center relative overflow-hidden">
+          <div class="text-8xl opacity-20 absolute">💻</div>
+          <div class="text-center z-10">
+            <div class="text-5xl mb-2">
+              {{ project.isFeatured ? '⭐' : '💼' }}
+            </div>
+            <span [class]="getCategoryColor(project.company)"
+                  class="px-3 py-1 rounded-full text-sm font-semibold">
+              {{ project.company }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Contenu -->
+        <div class="p-6">
+          <!-- Titre -->
+          <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+            {{ project.title }}
+          </h3>
+
+          <!-- Description (tronquée) -->
+          <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+            {{ project.description }}
+          </p>
+
+          <!-- Date -->
+          <p class="text-xs text-gray-400 mb-4">
+            📅 {{ formatDate(project.startDate) }}
+            → {{ project.endDate ? formatDate(project.endDate) : 'Présent' }}
+            <span class="ml-1 text-primary-500 font-medium">
+              ({{ calculateDuration(project.startDate, project.endDate) }})
+            </span>
+          </p>
+
+          <!-- Technologies -->
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span *ngFor="let tech of getTechList(project.technologies).slice(0, 4)"
+                  class="bg-blue-50 text-primary-700 px-2 py-1 rounded-md text-xs font-medium">
+              {{ getTechIcon(tech) }} {{ tech }}
+            </span>
+            <span *ngIf="getTechList(project.technologies).length > 4"
+                  class="bg-gray-100 text-gray-500 px-2 py-1 rounded-md text-xs">
+              +{{ getTechList(project.technologies).length - 4 }} autres
+            </span>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex gap-3 pt-4 border-t border-gray-100">
+            <button class="flex-1 text-center text-primary-600 hover:text-primary-700 font-medium text-sm transition-colors">
+              Voir détails →
+            </button>
+            <a *ngIf="project.gitHubUrl"
+               [href]="project.gitHubUrl"
+               target="_blank"
+               (click)="$event.stopPropagation()"
+               class="text-gray-500 hover:text-gray-700 text-sm transition-colors">
+              GitHub 🔗
+            </a>
+            <a *ngIf="project.liveDemoUrl"
+               [href]="project.liveDemoUrl"
+               target="_blank"
+               (click)="$event.stopPropagation()"
+               class="text-gray-500 hover:text-gray-700 text-sm transition-colors">
+              Demo 🚀
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal détail projet -->
+<div *ngIf="selectedProject"
+     class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+     (click)="closeProject()">
+
+  <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+       (click)="$event.stopPropagation()">
+
+    <!-- Header modal -->
+    <div class="bg-gradient-to-r from-primary-600 to-primary-800 text-white p-6 rounded-t-2xl">
+      <div class="flex justify-between items-start">
+        <div>
+          <span [class]="getCategoryColor(selectedProject.company)"
+                class="px-3 py-1 rounded-full text-xs font-semibold mb-3 inline-block">
+            {{ selectedProject.company }}
+          </span>
+          <h2 class="text-2xl font-bold">{{ selectedProject.title }}</h2>
+          <p class="text-blue-200 text-sm mt-1">
+            📅 {{ formatDate(selectedProject.startDate) }}
+            → {{ selectedProject.endDate ? formatDate(selectedProject.endDate) : 'Présent' }}
+            ({{ calculateDuration(selectedProject.startDate, selectedProject.endDate) }})
+          </p>
+        </div>
+        <button (click)="closeProject()"
+                class="text-white/70 hover:text-white transition-colors text-2xl">✕</button>
+      </div>
+    </div>
+
+    <!-- Body modal -->
+    <div class="p-6 space-y-6">
+
+      <!-- Description -->
+      <div>
+        <h3 class="text-lg font-bold text-gray-900 mb-3">📋 Description</h3>
+        <p class="text-gray-700 leading-relaxed">{{ selectedProject.description }}</p>
+      </div>
+
+      <!-- Technologies -->
+      <div>
+        <h3 class="text-lg font-bold text-gray-900 mb-3">🛠️ Technologies utilisées</h3>
+        <div class="flex flex-wrap gap-2">
+          <span *ngFor="let tech of getTechList(selectedProject.technologies)"
+                class="bg-blue-50 text-primary-700 px-3 py-2 rounded-lg text-sm font-medium border border-blue-100">
+            {{ getTechIcon(tech) }} {{ tech }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Liens -->
+      <div *ngIf="selectedProject.gitHubUrl || selectedProject.liveDemoUrl">
+        <h3 class="text-lg font-bold text-gray-900 mb-3">🔗 Liens</h3>
+        <div class="flex gap-4">
+          <a *ngIf="selectedProject.gitHubUrl"
+             [href]="selectedProject.gitHubUrl"
+             target="_blank"
+             class="btn-primary flex items-center gap-2">
+            GitHub 🔗
+          </a>
+          <a *ngIf="selectedProject.liveDemoUrl"
+             [href]="selectedProject.liveDemoUrl"
+             target="_blank"
+             class="btn-secondary flex items-center gap-2">
+            Demo Live 🚀
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading"
+     class="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="text-center">
+    <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-600 mx-auto mb-4"></div>
+    <p class="text-gray-600 font-medium">Chargement des projets...</p>
+  </div>
+</div>
+
+<!-- Error -->
+<div *ngIf="error" class="py-20 text-center">
+  <div class="text-6xl mb-4">⚠️</div>
+  <h3 class="text-2xl font-bold text-gray-900 mb-2">Erreur</h3>
+  <p class="text-gray-600 mb-6">{{ error }}</p>
+  <button (click)="loadProjects()" class="btn-primary">Réessayer</button>
+</div>

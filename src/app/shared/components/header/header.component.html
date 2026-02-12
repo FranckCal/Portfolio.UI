@@ -1,0 +1,82 @@
+
+<header class="bg-white shadow-md fixed w-full top-0 z-50">
+  <nav class="container mx-auto px-4 py-4">
+    <div class="flex justify-between items-center">
+      <!-- Logo -->
+      <a routerLink="/" class="text-2xl font-bold text-primary-600 hover:text-primary-700 transition-colors">
+        Franck CALDERARA
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex space-x-8">
+        <a routerLink="/" routerLinkActive="text-primary-600" [routerLinkActiveOptions]="{exact: true}"
+           class="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+          Accueil
+        </a>
+        <a routerLink="/cv" routerLinkActive="text-primary-600"
+           class="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+          CV
+        </a>
+        <a routerLink="/portfolio" routerLinkActive="text-primary-600"
+           class="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+          Portfolio
+        </a>
+        <a routerLink="/blog" routerLinkActive="text-primary-600"
+           class="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+          Blog
+        </a>
+      </div>
+
+      <!-- CTA Button -->
+      <div class="hidden md:block">
+        <a href="mailto:franck.calderara@example.com" 
+           class="btn-primary">
+          Me contacter
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button (click)="toggleMenu()" 
+              class="md:hidden text-gray-700 hover:text-primary-600 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path *ngIf="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M4 6h16M4 12h16M4 18h16"/>
+          <path *ngIf="isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div *ngIf="isMenuOpen" 
+         class="md:hidden mt-4 pb-4 space-y-3 border-t border-gray-200 pt-4">
+      <a routerLink="/" (click)="closeMenu()" 
+         routerLinkActive="text-primary-600" [routerLinkActiveOptions]="{exact: true}"
+         class="block text-gray-700 hover:text-primary-600 font-medium transition-colors">
+        Accueil
+      </a>
+      <a routerLink="/cv" (click)="closeMenu()" 
+         routerLinkActive="text-primary-600"
+         class="block text-gray-700 hover:text-primary-600 font-medium transition-colors">
+        CV
+      </a>
+      <a routerLink="/portfolio" (click)="closeMenu()" 
+         routerLinkActive="text-primary-600"
+         class="block text-gray-700 hover:text-primary-600 font-medium transition-colors">
+        Portfolio
+      </a>
+      <a routerLink="/blog" (click)="closeMenu()" 
+         routerLinkActive="text-primary-600"
+         class="block text-gray-700 hover:text-primary-600 font-medium transition-colors">
+        Blog
+      </a>
+      <a href="mailto:franck.calderara@example.com" 
+         class="block btn-primary text-center">
+        Me contacter
+      </a>
+    </div>
+  </nav>
+</header>
+
+<!-- Spacer pour compenser le header fixe -->
+<div class="h-20"></div>

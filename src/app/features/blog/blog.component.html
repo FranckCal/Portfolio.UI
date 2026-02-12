@@ -1,0 +1,208 @@
+<!-- Hero -->
+<section class="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-16">
+  <div class="container mx-auto px-4 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Blog Technique</h1>
+    <p class="text-xl text-blue-100 max-w-2xl mx-auto mb-8">
+      Partage d'expériences, tutoriels et veille technologique autour de .NET, Angular et Azure
+    </p>
+
+    <!-- Barre de recherche -->
+    <div class="max-w-lg mx-auto relative">
+      <input
+        type="text"
+        placeholder="Rechercher un article..."
+        (input)="onSearch($event)"
+        class="w-full px-6 py-3 rounded-full text-gray-900 shadow-lg focus:outline-none focus:ring-2 focus:ring-white pl-12">
+      <span class="absolute left-4 top-3.5 text-gray-400">🔍</span>
+    </div>
+  </div>
+</section>
+
+<!-- Filtres par tags -->
+<section class="py-6 bg-white border-b sticky top-20 z-40 shadow-sm">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-wrap gap-2 justify-center">
+      <button *ngFor="let tag of allTags"
+              (click)="filterByTag(tag)"
+              [class]="selectedTag === tag
+                ? 'bg-primary-600 text-white px-4 py-2 rounded-full font-medium shadow-md'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full font-medium transition-colors'">
+        {{ tag }}
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Liste des articles -->
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Compteur -->
+      <p class="text-gray-500 mb-8 text-center">
+        {{ filteredPosts.length }} article{{ filteredPosts.length > 1 ? 's' : '' }}
+        {{ selectedTag !== 'Tous' ? 'sur ' + selectedTag : '' }}
+      </p>
+
+      <!-- Aucun résultat -->
+      <div *ngIf="filteredPosts.length === 0 && !loading"
+           class="text-center py-20">
+        <div class="text-6xl mb-4">📭</div>
+        <h3 class="text-2xl font-bold text-gray-700 mb-2">Aucun article trouvé</h3>
+        <p class="text-gray-500 mb-4">Essayez un autre filtre ou une autre recherche</p>
+        <button (click)="filterByTag('Tous')"
+                class="btn-primary">
+          Voir tous les articles
+        </button>
+      </div>
+
+      <!-- Article en vedette (premier article) -->
+      <div *ngIf="filteredPosts.length > 0"
+           (click)="openPost(filteredPosts[0])"
+           class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 cursor-pointer hover:shadow-2xl transition-all duration-300 group">
+        <div class="md:flex">
+          <div class="md:w-2/5 h-64 md:h-auto bg-gradient-to-br from-primary-500 to-primary-800 flex items-center justify-center">
+            <div class="text-center text-white p-8">
+              <div class="text-6xl mb-4">📝</div>
+              <span class="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
+                ⭐ Article à la une
+              </span>
+            </div>
+          </div>
+          <div class="md:w-3/5 p-8">
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span *ngFor="let tag of getTagList(filteredPosts[0].tags)"
+                    class="bg-blue-50 text-primary-700 px-3 py-1 rounded-full text-xs font-medium">
+                {{ tag }}
+              </span>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+              {{ filteredPosts[0].title }}
+            </h2>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              {{ filteredPosts[0].summary }}
+            </p>
+            <div class="flex items-center gap-4 text-sm text-gray-400">
+              <span>📅 {{ formatDate(filteredPosts[0].publishedAt) }}</span>
+              <span>⏱️ {{ getReadingTime(filteredPosts[0].content) }} min de lecture</span>
+              <span>👁️ {{ filteredPosts[0].viewCount }} vues</span>
+            </div>
+            <button class="mt-4 btn-primary">
+              Lire l'article →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grille des autres articles -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let post of filteredPosts.slice(1)"
+             (click)="openPost(post)"
+             class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group hover:-translate-y-1">
+
+          <!-- Header card -->
+          <div class="h-40 bg-gradient-to-br from-primary-400 to-primary-700 flex items-center justify-center">
+            <div class="text-center text-white">
+              <div class="text-5xl mb-2">📄</div>
+              <div class="flex gap-1 justify-center flex-wrap px-4">
+                <span *ngFor="let tag of getTagList(post.tags).slice(0, 2)"
+                      class="bg-white/20 px-2 py-0.5 rounded text-xs">
+                  {{ tag }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contenu card -->
+          <div class="p-5">
+            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
+              {{ post.title }}
+            </h3>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+              {{ post.summary }}
+            </p>
+            <div class="flex items-center justify-between text-xs text-gray-400">
+              <span>📅 {{ formatDate(post.publishedAt) }}</span>
+              <span>⏱️ {{ getReadingTime(post.content) }} min</span>
+              <span>👁️ {{ post.viewCount }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal article -->
+<div *ngIf="selectedPost"
+     class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto"
+     (click)="closePost()">
+
+  <div class="bg-white rounded-2xl max-w-4xl w-full my-8 shadow-2xl"
+       (click)="$event.stopPropagation()">
+
+    <!-- Header article -->
+    <div class="bg-gradient-to-r from-primary-600 to-primary-800 text-white p-8 rounded-t-2xl">
+      <div class="flex justify-between items-start mb-4">
+        <div class="flex flex-wrap gap-2">
+          <span *ngFor="let tag of getTagList(selectedPost.tags)"
+                class="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
+            {{ tag }}
+          </span>
+        </div>
+        <button (click)="closePost()"
+                class="text-white/70 hover:text-white text-2xl transition-colors ml-4">✕</button>
+      </div>
+      <h1 class="text-3xl font-bold mb-3">{{ selectedPost.title }}</h1>
+      <div class="flex items-center gap-6 text-blue-200 text-sm">
+        <span>📅 {{ formatDate(selectedPost.publishedAt) }}</span>
+        <span>⏱️ {{ getReadingTime(selectedPost.content) }} min de lecture</span>
+        <span>👁️ {{ selectedPost.viewCount }} vues</span>
+      </div>
+    </div>
+
+    <!-- Résumé -->
+    <div class="bg-blue-50 px-8 py-4 border-b border-blue-100">
+      <p class="text-gray-700 italic leading-relaxed">💡 {{ selectedPost.summary }}</p>
+    </div>
+
+    <!-- Contenu article -->
+    <div class="p-8">
+      <div class="prose max-w-none"
+           [innerHTML]="parseMarkdown(selectedPost.content)">
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="p-8 pt-0 border-t border-gray-100">
+      <div class="flex justify-between items-center">
+        <div class="flex flex-wrap gap-2">
+          <span *ngFor="let tag of getTagList(selectedPost.tags)"
+                class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">
+            #{{ tag }}
+          </span>
+        </div>
+        <button (click)="closePost()" class="btn-primary">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading"
+     class="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="text-center">
+    <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-600 mx-auto mb-4"></div>
+    <p class="text-gray-600 font-medium">Chargement des articles...</p>
+  </div>
+</div>
+
+<!-- Error -->
+<div *ngIf="error" class="py-20 text-center">
+  <div class="text-6xl mb-4">⚠️</div>
+  <h3 class="text-2xl font-bold text-gray-900 mb-2">Erreur</h3>
+  <p class="text-gray-600 mb-6">{{ error }}</p>
+  <button (click)="loadPosts()" class="btn-primary">Réessayer</button>
+</div>
