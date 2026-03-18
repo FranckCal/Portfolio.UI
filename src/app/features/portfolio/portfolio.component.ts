@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectService } from '../../core/services/project.service';
 import { Project } from '../../core/models/project.model';
+import { ApiProject } from '../../core/models/api-project.model';
+import { APIS_CONFIG } from '../../core/config/apis.config';
 
 @Component({
   selector: 'app-portfolio',
@@ -18,6 +20,9 @@ export class PortfolioComponent implements OnInit {
   loading = true;
   error = '';
   filters: string[] = ['Tous'];
+
+  // APIs & Side Projects
+  apis: ApiProject[] = APIS_CONFIG;
 
   techIcons: { [key: string]: string } = {
     'NET 10': '🔷',
@@ -134,5 +139,14 @@ export class PortfolioComponent implements OnInit {
     if (years === 0) return `${rem} mois`;
     if (rem === 0) return `${years} an${years > 1 ? 's' : ''}`;
     return `${years} an${years > 1 ? 's' : ''} ${rem} mois`;
+  }
+
+  getStatusBadge(status: string): { color: string; label: string } {
+    const badges: { [key: string]: { color: string; label: string } } = {
+      'active': { color: 'bg-green-100 text-green-800', label: '🟢 Actif' },
+      'maintenance': { color: 'bg-yellow-100 text-yellow-800', label: '🟡 En maintenance' },
+      'prototype': { color: 'bg-blue-100 text-blue-800', label: '🔵 Prototype' }
+    };
+    return badges[status] || { color: 'bg-gray-100 text-gray-800', label: 'Inconnu' };
   }
 }
